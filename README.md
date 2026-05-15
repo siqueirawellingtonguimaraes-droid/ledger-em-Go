@@ -1,4 +1,4 @@
-# 💰 Ledger Financeiro — Sistema Interno de Controle Financeiro Operacional
+# 💰 Ledger Financeiro — Sistema Interno de Controle Financeiro Operacional (Em desenvolvimento)
 
 > Um módulo interno desenvolvido para estruturar o controle financeiro de uma empresa que não possuía sistema financeiro formal.
 
