@@ -1,12 +1,12 @@
 package config
 
 import (
-	"ledger/src/infra"
+	"ledger/src/infra/db"
 	"os"
 )
 
 func InitDB() error {
-	db, err := infra.ConnectDB()
+	db, err := db.NewSQLiteConnection()
 	if err != nil {
 		return err
 	}

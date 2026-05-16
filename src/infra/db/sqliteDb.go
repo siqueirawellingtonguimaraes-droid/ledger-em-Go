@@ -1,4 +1,4 @@
-package infra
+package db
 
 import (
 	"database/sql"
@@ -6,7 +6,7 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-func ConnectDB() (*sql.DB, error) {
+func NewSQLiteConnection() (*sql.DB, error) {
 	db, err := sql.Open("sqlite", "./database.db")
 	if err != nil {
 		return nil, err

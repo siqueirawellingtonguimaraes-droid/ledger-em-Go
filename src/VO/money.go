@@ -1,13 +1,15 @@
 package vo
 
-import "errors"
+import (
+	"errors"
+)
 
 type Money struct {
 	Amount   uint64
-	Currency string
+	Currency Currency
 }
 
-func NewMoney(amount uint64, currency string) (Money, error) {
+func NewMoney(amount uint64, currency Currency) (Money, error) {
 	if currency == "" {
 		return Money{}, errors.New("currency is required")
 	}
@@ -22,7 +24,7 @@ func (m Money) GetAmount() uint64 {
 	return m.Amount
 }
 
-func (m Money) GetCurrency() string {
+func (m Money) GetCurrency() Currency {
 	return m.Currency
 }
 

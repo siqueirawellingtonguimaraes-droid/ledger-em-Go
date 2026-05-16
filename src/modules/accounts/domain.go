@@ -11,7 +11,7 @@ import (
 type Account struct {
 	ID       uuid.UUID
 	Name     string
-	Currency string
+	Currency vo.Currency
 }
 
 type AccountWithBalance struct {
@@ -19,7 +19,7 @@ type AccountWithBalance struct {
 	Balance vo.Money
 }
 
-func NewAccount(name, currency string) (Account, error) {
+func NewAccount(name string, currency vo.Currency) (Account, error) {
 	if len(strings.TrimSpace(name)) <= 0 {
 		return Account{}, errors.New("O nome deve ser preenchido")
 	}
@@ -29,4 +29,25 @@ func NewAccount(name, currency string) (Account, error) {
 		Name:     name,
 		Currency: currency,
 	}, nil
+}
+
+func NewAccountWithBalance(account Account) (AccountWithBalance, error) {
+
+	balance, err := vo.NewMoney(0, account.Currency)
+
+	if err != nil {
+		return AccountWithBalance{}, err
+	}
+
+	return AccountWithBalance{
+		Account: account,
+		Balance: balance,
+	}, nil
+}
+
+func calculateBalance(accout Account) vo.Money {
+	return vo.Money{
+		Amount:   150000,
+		Currency: accout.Currency,
+	}
 }

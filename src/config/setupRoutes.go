@@ -6,6 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(r *gin.Engine) {
-	accounts.SetupAccountRouters(r)
+func SetupRoutes(r *gin.Engine, service *accounts.AccountService) {
+	accounts.SetupAccountRouters(r, service)
 }
