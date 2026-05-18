@@ -15,5 +15,5 @@ type AccountResponseDTO struct {
 	ID       uuid.UUID   `json:"id"`
 	Name     string      `json:"name"`
 	Currency vo.Currency `json:"currency"`
-	Balance  vo.Money    `json:"balance"`
+	Balance  int64       `json:"balance"`
 }

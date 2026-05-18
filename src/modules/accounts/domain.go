@@ -44,10 +44,3 @@ func NewAccountWithBalance(account Account) (AccountWithBalance, error) {
 		Balance: balance,
 	}, nil
 }
-
-func calculateBalance(accout Account) vo.Money {
-	return vo.Money{
-		Amount:   150000,
-		Currency: accout.Currency,
-	}
-}
