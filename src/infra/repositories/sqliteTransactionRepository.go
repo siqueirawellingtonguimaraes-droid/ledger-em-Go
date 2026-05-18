@@ -20,7 +20,7 @@ func NewTransactionSQLiteRepository(db *sql.DB) *SQLiteTransactionRepository {
 
 func (r *SQLiteTransactionRepository) Save(transaction *transactions.Transaction) error {
 
-	statements, err := r.db.Prepare("INSERT INTO transactions (id, description) VALUES (?, ?)")
+	statements, err := r.db.Prepare("INSERT INTO transactions (id, description) VALUES (?, ?);")
 	if err != nil {
 		return err
 	}
@@ -31,7 +31,7 @@ func (r *SQLiteTransactionRepository) Save(transaction *transactions.Transaction
 		return err
 	}
 
-	statements, err = r.db.Prepare("INSERT INTO transaction_entries (id, transaction_id, account_id, amount, currency, direction) VALUES (?, ?, ?, ?, ?, ?)")
+	statements, err = r.db.Prepare("INSERT INTO transaction_entries (id, transaction_id, account_id, amount, currency, direction) VALUES (?, ?, ?, ?, ?, ?);")
 	if err != nil {
 		return err
 	}
@@ -47,27 +47,27 @@ func (r *SQLiteTransactionRepository) Save(transaction *transactions.Transaction
 	return nil
 }
 
-func (r *SQLiteTransactionRepository) FindByID(id string) (*transactions.Transaction, error) {
-	statements, err := r.db.Prepare("SELECT * FROM transactions WHERE id=?")
+func (r *SQLiteTransactionRepository) FindByID(id string) (transactions.Transaction, error) {
+	statements, err := r.db.Prepare("SELECT id, description FROM transactions WHERE id=?;")
 	if err != nil {
-		return &transactions.Transaction{}, err
+		return transactions.Transaction{}, err
 	}
 	defer statements.Close()
 	var transaction transactions.Transaction
 
 	row := statements.QueryRow(id)
 	if err = row.Scan(&transaction.ID, &transaction.Description); err != nil {
-		return &transactions.Transaction{}, err
+		return transactions.Transaction{}, err
 	}
 
-	statements, err = r.db.Prepare("SELECT * FROM transaction_entries WHERE transaction_id=?")
+	statements, err = r.db.Prepare("SELECT id, transaction_id, account_id, amount, currency, direction FROM transaction_entries WHERE transaction_id=?;")
 	if err != nil {
-		return &transactions.Transaction{}, err
+		return transactions.Transaction{}, err
 	}
 
 	rows, err := statements.Query(id)
 	if err != nil {
-		return &transactions.Transaction{}, err
+		return transactions.Transaction{}, err
 	}
 
 	defer statements.Close()
@@ -81,12 +81,12 @@ func (r *SQLiteTransactionRepository) FindByID(id string) (*transactions.Transac
 		)
 
 		if err = rows.Scan(&entryID, &transaction.ID, &accountID, &amount, &currency, &direction); err != nil {
-			return &transactions.Transaction{}, err
+			return transactions.Transaction{}, err
 		}
 
 		money, err := vo.NewMoney(amount, vo.Currency(currency))
 		if err != nil {
-			return &transactions.Transaction{}, err
+			return transactions.Transaction{}, err
 		}
 
 		entry := transactions.TransactionEntry{
@@ -98,11 +98,11 @@ func (r *SQLiteTransactionRepository) FindByID(id string) (*transactions.Transac
 		transaction.Entries = append(transaction.Entries, entry)
 	}
 
-	return &transaction, nil
+	return transaction, nil
 }
 
 func (r *SQLiteTransactionRepository) FindAll() ([]transactions.Transaction, error) {
-	statements, err := r.db.Prepare("SELECT * FROM transactions")
+	statements, err := r.db.Prepare("SELECT id, description FROM transactions;")
 	if err != nil {
 		return []transactions.Transaction{}, err
 	}
@@ -124,7 +124,7 @@ func (r *SQLiteTransactionRepository) FindAll() ([]transactions.Transaction, err
 }
 
 func (r *SQLiteTransactionRepository) GetEntriesByAccountID(accountID string) ([]transactions.TransactionEntry, error) {
-	statements, err := r.db.Prepare("SELECT * FROM transaction_entries WHERE account_id=?")
+	statements, err := r.db.Prepare("SELECT id, account_id, amount, currency, direction FROM transaction_entries WHERE account_id=?;")
 	if err != nil {
 		return []transactions.TransactionEntry{}, err
 	}
@@ -138,15 +138,14 @@ func (r *SQLiteTransactionRepository) GetEntriesByAccountID(accountID string) ([
 	var entries []transactions.TransactionEntry
 	for rows.Next() {
 		var (
-			entryID       string
-			transactionID string
-			accountID     string
-			amount        uint64
-			currency      string
-			direction     string
+			entryID   string
+			accountID string
+			amount    uint64
+			currency  string
+			direction string
 		)
 
-		if err = rows.Scan(&entryID, &transactionID, &accountID, &amount, &currency, &direction); err != nil {
+		if err = rows.Scan(&entryID, &accountID, &amount, &currency, &direction); err != nil {
 			return []transactions.TransactionEntry{}, err
 		}
 

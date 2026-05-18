@@ -5,6 +5,7 @@ import (
 	"ledger/src/infra/db"
 	"ledger/src/infra/repositories"
 	"ledger/src/modules/accounts"
+	"ledger/src/modules/transactions"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -23,13 +24,15 @@ func main() {
 	}
 	defer db.Close()
 
-	repo := repositories.NewAccountSQLiteRepository(db)
+	transactionRepo := repositories.NewTransactionSQLiteRepository(db)
+	transactionModule := transactions.NewModule(transactions.NewTransactionService(transactionRepo))
 
-	accoutService := accounts.NewAccountService(repo)
+	accountrepo := repositories.NewAccountSQLiteRepository(db)
+	accountModule := accounts.NewModule(accounts.NewAccountService(accountrepo, transactionRepo))
 
 	r := gin.Default()
 
-	config.SetupRoutes(r, accoutService)
+	config.SetupRoutes(r, accountModule, transactionModule)
 
 	log.Fatal(r.Run(":8080"))
 }

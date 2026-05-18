@@ -16,6 +16,7 @@ func SetupAccountRouters(r *gin.Engine, service *AccountService) {
 				ctx.JSON(http.StatusBadRequest, gin.H{
 					"error": err,
 				})
+				return
 			}
 
 			err := service.Create(&body)
@@ -23,6 +24,7 @@ func SetupAccountRouters(r *gin.Engine, service *AccountService) {
 				ctx.JSON(http.StatusInternalServerError, gin.H{
 					"error": err,
 				})
+				return
 			}
 
 			ctx.JSON(http.StatusCreated, gin.H{
@@ -31,9 +33,16 @@ func SetupAccountRouters(r *gin.Engine, service *AccountService) {
 		})
 
 		accountGroup.GET("/:id", func(ctx *gin.Context) {
-			ctx.JSON(200, gin.H{
-				"message": "Get account by ID endpoint",
-			})
+			id := ctx.Param("id")
+
+			account, err := service.GetByID(id)
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error": err.Error(),
+				})
+				return
+			}
+			ctx.JSON(http.StatusOK, account)
 		})
 	}
 }

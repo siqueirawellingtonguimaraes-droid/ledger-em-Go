@@ -4,9 +4,10 @@ import "github.com/google/uuid"
 
 func DomainToResponseDTO(account AccountWithBalance) AccountResponseDTO {
 	return AccountResponseDTO{
-		ID:      account.Account.ID,
-		Name:    account.Account.Name,
-		Balance: int64(account.Balance.Amount),
+		ID:       account.Account.ID,
+		Name:     account.Account.Name,
+		Currency: account.Account.Currency,
+		Balance:  int64(account.Balance.Amount),
 	}
 }
 

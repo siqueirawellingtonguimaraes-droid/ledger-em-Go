@@ -6,11 +6,16 @@ CREATE TABLE IF NOT EXISTS accounts (
 
 CREATE TABLE IF NOT EXISTS transactions (
     id TEXT PRIMARY KEY,
-    description TEXT,
-    credit_account_id TEXT NOT NULL,
-    debit_account_id TEXT NOT NULL,
+    description TEXT
+);
+
+CREATE TABLE IF NOT EXISTS transaction_entries (
+    id TEXT PRIMARY KEY,
+    transaction_id TEXT NOT NULL,
+    account_id TEXT NOT NULL,
     amount INTEGER NOT NULL,
-    date TIMESTAMP NOT NULL,
-    FOREIGN KEY (credit_account_id) REFERENCES accounts(id),
-    FOREIGN KEY (debit_account_id) REFERENCES accounts(id)
+    currency TEXT NOT NULL,
+    direction TEXT NOT NULL,
+    FOREIGN KEY (transaction_id) REFERENCES transactions(id),
+    FOREIGN KEY (account_id) REFERENCES accounts(id)
 );
