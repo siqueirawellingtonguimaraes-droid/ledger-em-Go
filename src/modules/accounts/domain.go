@@ -20,7 +20,7 @@ type AccountWithBalance struct {
 }
 
 func NewAccount(name string, currency vo.Currency) (Account, error) {
-	if len(strings.TrimSpace(name)) <= 0 {
+	if len(strings.TrimSpace(name)) <= 3 {
 		return Account{}, errors.New("O nome deve ser preenchido")
 	}
 
