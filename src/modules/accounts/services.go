@@ -41,6 +41,31 @@ func (s *AccountService) GetByID(id string) (AccountResponseDTO, error) {
 	return DomainToResponseDTO(accountWithBalance), nil
 }
 
+func (s *AccountService) GetAll() ([]AccountResponseDTO, error) {
+	acc, err := s.repository.FindAll()
+	if err != nil {
+		return []AccountResponseDTO{}, nil
+	}
+
+	response := make([]AccountResponseDTO, 0, len(acc))
+	for _, a := range acc {
+		balance, err := s.calculateBalance(a.ID.String(), a.Currency)
+		if err != nil {
+			return []AccountResponseDTO{}, err
+		}
+
+		respWithBalance := AccountWithBalance{
+			Account: a,
+			Balance: balance,
+		}
+
+		response = append(response, DomainToResponseDTO(respWithBalance))
+	}
+
+	return response, nil
+
+}
+
 func (s *AccountService) calculateBalance(accountId string, currency vo.Currency) (vo.Money, error) {
 	entries, err := s.transactionRepo.GetEntriesByAccountID(accountId)
 	if err != nil {

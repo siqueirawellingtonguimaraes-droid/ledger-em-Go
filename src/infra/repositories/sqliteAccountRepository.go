@@ -47,3 +47,30 @@ func (r *SQLiteAccountRepository) FindByID(id string) (*accounts.Account, error)
 
 	return &account, nil
 }
+
+func (r *SQLiteAccountRepository) FindAll() ([]accounts.Account, error) {
+	statements, err := r.db.Prepare("SELECT * FROM accounts")
+	if err != nil {
+		return nil, err
+	}
+	defer statements.Close()
+
+	rows, err := statements.Query()
+	if err != nil {
+		return []accounts.Account{}, err
+	}
+
+	var acc []accounts.Account
+
+	for rows.Next() {
+		var a accounts.Account
+
+		if err := rows.Scan(&a.ID, &a.Name, &a.Currency); err != nil {
+			return []accounts.Account{}, err
+		}
+
+		acc = append(acc, a)
+	}
+
+	return acc, nil
+}

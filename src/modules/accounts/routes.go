@@ -30,6 +30,7 @@ func SetupAccountRouters(r *gin.Engine, service *AccountService) {
 			ctx.JSON(http.StatusCreated, gin.H{
 				"message": "Conta criada com sucesso",
 			})
+
 		})
 
 		accountGroup.GET("/:id", func(ctx *gin.Context) {
@@ -43,6 +44,17 @@ func SetupAccountRouters(r *gin.Engine, service *AccountService) {
 				return
 			}
 			ctx.JSON(http.StatusOK, account)
+		})
+
+		accountGroup.GET("/all", func(ctx *gin.Context) {
+			accounts, err := service.GetAll()
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error": err.Error(),
+				})
+				return
+			}
+			ctx.JSON(http.StatusOK, accounts)
 		})
 	}
 }

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ledger Bank</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>LedgerBank</h1>
+        </div>
+
+        <nav>
+            <a href="index.html" class="active">Dashboard</a>
+            <a href="accounts.html">Contas</a>
+            <a href="transactions.html">Transações</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h2>Dashboard Financeiro</h2>
+                <p>Controle de contas e transferências</p>
+            </div>
+        </header>
+
+        <section class="cards-grid">
+
+            <div class="card balance-card">
+                <span>Total Movimentado</span>
+
+                <h2 id="dashboard-total-moved">
+                    R$ 0,00
+                </h2>
+            </div>
+
+            <div class="card info-card">
+                <span>Contas Ativas</span>
+
+                <h2 id="dashboard-total-accounts">
+                    0
+                </h2>
+            </div>
+
+            <div class="card info-card">
+                <span>Transferências</span>
+
+                <h2 id="dashboard-transactions">
+                    0
+                </h2>
+            </div>
+
+        </section>
+
+        <section class="content-grid">
+
+            <div class="card panel-card">
+
+                <div class="panel-header">
+                    <h3>Criar Conta</h3>
+                </div>
+
+                <form
+                    class="form-grid"
+                    id="create-account-form"
+                >
+
+                    <div class="input-group">
+                        <label>Nome da Conta</label>
+
+                        <input
+                            type="text"
+                            id="account-name"
+                            placeholder="Conta Principal"
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label>Moeda</label>
+
+                        <select id="account-currency">
+                            <option value="BRL">
+                                BRL
+                            </option>
+                        </select>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Criar Conta
+                    </button>
+
+                </form>
+
+            </div>
+
+            <div class="card panel-card">
+
+                <div class="panel-header">
+                    <h3>Transferência Rápida</h3>
+                </div>
+
+                <form
+                    class="form-grid"
+                    id="quick-transfer-form"
+                >
+
+                    <div class="input-group">
+                        <label>Conta Origem</label>
+
+                        <input
+                            type="text"
+                            id="quick-origin-account"
+                            placeholder="UUID da conta"
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label>Conta Destino</label>
+
+                        <input
+                            type="text"
+                            id="quick-destination-account"
+                            placeholder="UUID da conta"
+                        >
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label>Valor</label>
+
+                        <input
+                            type="number"
+                            id="quick-transfer-amount"
+                            placeholder="1000"
+                        >
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Transferir
+                    </button>
+
+                </form>
+
+            </div>
+            <div id="accounts-list" class="accounts-grid"></div>
+
+        </section>
+
+    </main>
+
+    <script src="./js/app.js"></script>
+
+</body>
+</html>
