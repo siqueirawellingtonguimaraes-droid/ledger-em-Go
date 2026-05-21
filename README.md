@@ -177,6 +177,31 @@ O foco principal é estudo arquitetural e aprofundamento em conceitos utilizados
 
 ---
 
+---
+
+# 🚀 Como Rodar o Projeto
+## 📋 Pré Requisitos
+- Go
+- Git
+
+## ```bash
+git clone https://github.com/siqueirawellingtonguimaraes-droid/ledger-em-Go.git
+
+cd ledger-em-Go
+```
+
+## ▶️ Executando o Projeto
+
+```bash
+go run cmd/main.go
+```
+
+## 🧪 Testando a aplicação
+
+No diretório "frontend", abra o arquivo index.html no seu navegador para testar a aplicação.
+
+---
+
 # 👨‍💻 Considerações Finais
 
 GoLedger foi um projeto extremamente importante para entender como aplicações financeiras vão muito além de operações básicas de CRUD.
