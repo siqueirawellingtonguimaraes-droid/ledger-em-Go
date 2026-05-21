@@ -1,123 +1,192 @@
-# 💰 Ledger Financeiro — Sistema Interno de Controle Financeiro Operacional (Em desenvolvimento)
+# 💰 GoLedger
 
-> Um módulo interno desenvolvido para estruturar o controle financeiro de uma empresa que não possuía sistema financeiro formal.
-
----
-
-# 🧠 Contexto
-
-Este projeto foi criado dentro de um cenário real em que a empresa **não possuía um sistema financeiro estruturado**.
-
-Na prática, isso gerava problemas como:
-
-- registros financeiros feitos de forma manual e descentralizada
-- dificuldade em entender o fluxo real de entradas e saídas
-- ausência de histórico confiável para auditoria interna
-- inconsistência entre o que era operado e o que era registrado
-- baixa visibilidade sobre o estado financeiro da empresa
-
-O objetivo do projeto foi introduzir uma estrutura mínima e confiável de controle financeiro, sem depender de um sistema externo complexo.
+> Implementação de um pequeno Ledger financeiro em Go, explorando conceitos utilizados em arquiteturas financeiras reais.
 
 ---
 
-# 🎯 Objetivo do Sistema
+# 🧠 Sobre o Projeto
 
-O Ledger foi desenvolvido para:
+GoLedger é um projeto desenvolvido com foco em estudar como sistemas financeiros lidam com consistência, rastreabilidade e integridade de dados.
 
-- criar um registro centralizado de movimentações financeiras
-- organizar entradas e saídas de forma estruturada
-- garantir rastreabilidade de cada operação financeira
-- reduzir dependência de controles manuais (planilhas e anotações)
-- fornecer base confiável para análises financeiras internas
+Ao invés de seguir o modelo tradicional de CRUD, o projeto foi construído explorando conceitos encontrados em sistemas financeiros reais, onde o saldo não é armazenado diretamente, mas calculado a partir do histórico de transações.
 
----
+Mesmo sendo um projeto relativamente pequeno, ele foi pensado para explorar problemas comuns em domínios financeiros:
 
-# 🧩 Escopo do Projeto
+- precisão monetária
+- consistência de dados
+- modelagem de domínio
+- imutabilidade
+- rastreabilidade de operações
+- separação de responsabilidades
 
-Este módulo representa apenas uma parte do sistema financeiro que foi construído internamente, focado em:
-
-- registro de movimentações financeiras
-- categorização de despesas e receitas
-- organização de dados para análise
-- criação de histórico financeiro confiável
+O principal objetivo foi aprofundar conhecimentos em engenharia de software aplicada a sistemas críticos, utilizando Go como linguagem principal.
 
 ---
 
-# 📊 Conceito de Ledger
+# 🎯 Objetivos Técnicos
 
-O sistema segue o conceito de **ledger financeiro simplificado**, onde:
+O projeto foi desenvolvido para explorar:
 
-- toda movimentação é registrada como um evento
-- cada evento possui categoria e contexto
-- os dados são armazenados de forma imutável (histórico auditável)
-- consultas são feitas a partir dos registros, não de valores sobrescritos
-
----
-
-# ⚙️ Principais Problemas Resolvidos
-
-Antes do sistema:
-
-- ausência de histórico financeiro confiável
-- dificuldade em saber onde o dinheiro estava sendo gasto
-- controle manual sujeito a erros humanos
-- falta de padronização nos registros
-
-Depois do sistema:
-
-- todas as movimentações passaram a ser registradas
-- maior clareza sobre fluxo de caixa
-- organização por categorias financeiras
-- base estruturada para decisões financeiras
+- modelagem de transações financeiras
+- cálculo de saldo baseado em eventos
+- arquitetura orientada a domínio
+- separação entre domínio e infraestrutura
+- consistência de dados financeiros
+- redução de acoplamento
+- organização de regras de negócio
 
 ---
 
-# 🏗️ Visão da Solução
+# 🏗️ Conceitos de Engenharia Aplicados
 
-O sistema foi pensado como uma camada simples, porém confiável, para registrar o financeiro da empresa:
+## 💵 Representação Monetária com Inteiros
 
-- entrada de dados padronizada
-- registro centralizado de movimentações
-- estrutura orientada a histórico
-- foco em confiabilidade, não complexidade
+Valores monetários são representados utilizando inteiros ao invés de floating point.
 
----
+```txt
+1000 = R$10,00
+```
 
-# 🔄 Fluxo de Funcionamento
-
-1. Uma movimentação financeira acontece (entrada ou saída)
-2. O sistema registra o evento no ledger
-3. O evento é categorizado (ex: despesa, receita, custo operacional)
-4. O registro é armazenado no histórico financeiro
-5. O time utiliza os dados para análise e controle
+Essa abordagem evita problemas de precisão e arredondamento.
 
 ---
 
-# 📌 Impacto no Negócio
+## 📚 Saldo Baseado em Histórico de Transações
 
-A implementação deste sistema trouxe melhorias diretas:
+O saldo não é persistido diretamente no banco.
 
-- maior visibilidade do fluxo financeiro
-- redução de erros em registros manuais
-- organização básica do controle financeiro da empresa
-- melhoria na tomada de decisão baseada em dados reais
-- criação de histórico financeiro estruturado pela primeira vez
+Ele é calculado dinamicamente a partir do histórico de transações.
+
+```txt
++1000
+-250
++500
+------
+1250
+```
+
+Esse modelo melhora:
+
+- auditabilidade
+- rastreabilidade
+- integridade histórica
+- previsibilidade de comportamento
 
 ---
 
-# 🧠 Aprendizados
+## 🧩 Organização Inspirada em DDD
 
-Durante o desenvolvimento deste sistema foram aplicados conceitos como:
+A estrutura da aplicação foi organizada utilizando conceitos inspirados em Domain-Driven Design, e busca manter:
 
-- estruturação de dados financeiros em ambientes sem sistema prévio
-- modelagem de eventos financeiros simples
-- organização de processos manuais em sistema digital
-- criação de rastreabilidade a partir do zero
-- construção de soluções leves para problemas reais
+- regras de negócio isoladas
+- baixo acoplamento
+- alta coesão
+- facilidade de manutenção e evolução
 
 ---
 
-# 🚀 Status
+## 🔌 Injeção de Dependências
 
-✔️ Implementado como solução interna  
-⚠️ Evolução contínua conforme necessidades operacionais da empresa  
+As dependências são injetadas explicitamente, reduzindo acoplamento entre camadas e melhorando testabilidade da aplicação.
+
+---
+
+## 🧱 Value Objects
+
+O projeto utiliza Value Objects para evitar Primitive Obsession.
+
+Exemplos:
+
+- Money
+- Currency (BRL, USD)
+- Direction (credit, debit)
+
+Isso torna o domínio mais expressivo, seguro e consistente.
+
+---
+
+# ⚙️ Conceitos Financeiros Explorados
+
+## 💳 Transações como Fonte da Verdade
+
+Toda movimentação financeira é representada como uma transação. O estado do sistema é derivado das transações registradas.
+
+---
+
+## ⚖️ Consistência Acima de Simplicidade
+
+Durante o desenvolvimento, ficou evidente como sistemas financeiros exigem muito mais preocupação com:
+
+- consistência
+- previsibilidade
+- rastreabilidade
+- integridade de dados
+
+do que aplicações CRUD tradicionais.
+
+---
+
+# 🚀 Melhorias Futuras
+
+Mesmo sendo um projeto de estudo, diversos cenários reais surgiram durante o desenvolvimento.
+
+## Planejado
+
+- auditoria de transações
+- idempotência
+- controle de concorrência
+- proteção contra alteração de registros
+- triggers para segurança financeira
+- processamento orientado a eventos
+- reconciliação financeira
+- suporte a double-entry bookkeeping
+
+---
+
+# 🧠 O Que Este Projeto Demonstra
+
+Este projeto foi desenvolvido para demonstrar conhecimentos em:
+
+- engenharia de software aplicada a domínios críticos
+- arquitetura backend
+- modelagem financeira
+- Domain-Driven Design
+- organização de código
+- desacoplamento entre camadas
+- consistência de dados
+- design orientado a domínio
+
+---
+
+# 📦 Stack
+
+- Go (Golang)
+- SQLite (Em um sistema real, nunca se deve usar SQLite para uma aplicação desse porte)
+- Domain-Driven Design (DDD)
+- Repository Pattern
+- Dependency Injection
+- Value Objects
+
+---
+
+# 📌 Observação
+
+Este projeto não possui objetivo de se tornar um sistema bancário real.
+
+O foco principal é estudo arquitetural e aprofundamento em conceitos utilizados em sistemas financeiros modernos.
+
+---
+
+# 👨‍💻 Considerações Finais
+
+GoLedger foi um projeto extremamente importante para entender como aplicações financeiras vão muito além de operações básicas de CRUD.
+
+Durante o desenvolvimento, foi possível explorar desafios reais relacionados a:
+
+- precisão monetária
+- consistência de dados
+- modelagem de domínio
+- rastreabilidade de operações
+- integridade financeira
+
+Projetos como esse ajudam a desenvolver uma visão muito mais profunda sobre engenharia de software, principalmente quando começamos a trabalhar com domínios onde confiabilidade e consistência são requisitos fundamentais.
